@@ -1,4 +1,5 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
+import { type TextProps, StyleSheet } from 'react-native';
+import { Text } from "@gluestack-ui/themed"
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 

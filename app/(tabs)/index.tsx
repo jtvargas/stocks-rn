@@ -4,6 +4,7 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { StockCard } from '@/components/StockCard';
 
 export default function HomeScreen() {
   return (
@@ -15,9 +16,10 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView p="$6">
         <ThemedText type="title">Stocks Graph Screen!</ThemedText>
         <HelloWave />
+        <StockCard change={2} label='APPL' price={220}/>
       </ThemedView>
     </ParallaxScrollView>
   );
