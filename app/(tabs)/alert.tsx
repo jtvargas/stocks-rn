@@ -7,7 +7,7 @@ import { ThemedView } from '@/components/ThemedView';
 
 export default function AlertScreen() {
   return (
-    <ThemedView style={styles.titleContainer}>
+    <ThemedView style={styles.titleContainer} p="$6">
     <ThemedText type="title">USED FOR TEMPLATE USE - NOT MODIFY THIS FILE</ThemedText>
     <HelloWave />
   </ThemedView>

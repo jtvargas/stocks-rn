@@ -32,7 +32,7 @@ export default function TabLayout() {
         })}
         options={{
           href: '/alert',
-          title: 'Alert',
+          title: 'Create Alert',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'notifications-circle' : 'notifications-circle-outline'} color={color} />
           ),

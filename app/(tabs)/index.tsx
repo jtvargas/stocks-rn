@@ -19,7 +19,7 @@ export default function HomeScreen() {
       <ThemedView p="$6">
         <ThemedText type="title">Stocks Graph Screen!</ThemedText>
         <HelloWave />
-        <StockCard change={2} label='APPL' price={220}/>
+        <StockCard change={2} label='APPL' price={220} marginalStatus='up' onPress={() => null}/>
       </ThemedView>
     </ParallaxScrollView>
   );
