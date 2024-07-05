@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Image, StyleSheet, Platform } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import debounce from 'lodash/debounce'
+import toUpper from 'lodash/toUpper';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { StockCard } from '@/components/StockCard';
-import { StockChart } from '@/components/StockChart';
-import { StocksDropdown, IStockValue } from '@/components/StocksDropdown';
 import { useWatchlistContext } from "@/context/WatchlistContext"
-import { HStack, VStack } from '@gluestack-ui/themed';
+import { Input,InputField,InputSlot,InputIcon, SearchIcon,  VStack } from '@gluestack-ui/themed';
+import { useFinnhub } from '@/hooks/useFinnhub';
+import { getMarginalStatus } from '@/utils/stocks';
 
 const stocks = [
   { label: 'Item 1', value: '1' },
@@ -23,18 +25,26 @@ const stocks = [
 ];
 
 export default function StocksScreen() {
-  const [stockSelected, setStock] = useState<string | null>(null);
-  const { state, addWatchlist, removeWatchlist } = useWatchlistContext();
+  const { symbolSearchResults, stockSymbols, loading, error, symbolSearch, fetchStockSymbols } = useFinnhub();
+  const [query, setQuery] = useState<string>('');
+  const {  addWatchlist  } = useWatchlistContext();
 
-  const handleOnSelectStock = (item:  IStockValue) => {
-    if(item && item.value) {
-      setStock(item.value)
-    }
-  }
+  useEffect(() => {
+    fetchStockSymbols("US")
+  }, [])
 
+ 
   const handlePressCard = () => {
-    addWatchlist("APPL")
+    addWatchlist(query)
   }
+
+
+  const handleSearch = (symbol: string) => {
+    setQuery(symbol);
+    symbolSearch(symbol)
+  };
+  const debounceSearch = debounce(handleSearch, 300)
+
 
   return (
     <ParallaxScrollView
@@ -43,13 +53,23 @@ export default function StocksScreen() {
       <ThemedView p="$6">
         <VStack pb={"$6"}>
           <ThemedText type="title">Stocks</ThemedText>
-          <ThemedText type="default">Touch a card to add to your watchlist</ThemedText>
+          <ThemedText type="default" italic pb={"$2"}>Touch a card to add to your watchlist</ThemedText>
+          <Input
+            variant="outline"
+            size="md"
+            isDisabled={false}
+            isInvalid={false}
+            isReadOnly={false}
+          >
+              <InputSlot pl="$3">
+                <InputIcon as={SearchIcon} />
+              </InputSlot>
+            <InputField placeholder="Search stock by symbol..." onChangeText={debounceSearch}/>
+          </Input>
         </VStack>
        
-
-        <StockCard change={2} label='APPL' price={220} marginalStatus='up' onPress={handlePressCard}/>
-        <StocksDropdown data={stocks} value={stockSelected} onChange={handleOnSelectStock}/>
-        
+      {symbolSearchResults && !loading?  <StockCard change={symbolSearchResults.d} label={toUpper(query)} price={symbolSearchResults.c} marginalStatus={getMarginalStatus(symbolSearchResults)} onPress={handlePressCard}/>: null}
+               
       </ThemedView>
     </ParallaxScrollView>
   );
