@@ -29,7 +29,7 @@ export function StockCard(props: StockCard) {
 
       <VStack justifyContent='space-between' alignItems='flex-end'>
         <Box  w="$20">
-          <Text color="$secondary900" size='lg' bold>${round(props.price, 2)}</Text>
+          <Text color="$secondary900" size='lg' bold>${props.price ? round(props.price, 2) : '--'}</Text>
         </Box>
 
         {props.alertPrice ? (

@@ -22,12 +22,14 @@ const getWatchlistItems = (state: any) => {
 export default function Watchlist() {
   const { state, removeWatchlist } = useWatchlistContext();
   const symbolsWatched = getWatchlistItems(state)
-  const { stockData } = useStockSocket(symbolsWatched);
+  const { stockData, socket } = useStockSocket(symbolsWatched);
   const { alerts } = useAlertContext();
 
-  console.log({alerts})
   const removeStockFromWatchlist = (stockId: string) => {
     removeWatchlist(stockId)
+    if(socket) {
+      socket.send(JSON.stringify({ type: 'unsubscribe', symbol: stockId }));
+    }
   }
 
   const getStockChangeData = (symbol: string) => {
@@ -52,9 +54,6 @@ export default function Watchlist() {
       </Center>
     )
   }
-
-  console.log({stockData, symbolsWatched, state})
-
 
 
   return (

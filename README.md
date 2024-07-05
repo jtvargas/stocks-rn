@@ -1,50 +1,92 @@
-# Welcome to your Expo app 👋
+# Stocks & Watchlist App: React Native App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mobile application developed with **React Native**.
 
-## Get started
+An app that connects with **Finnhub API** to allow users to search for stocks, add them to a watchlist, and create price alerts for stocks.
 
-1. Install dependencies
+<img src="./assets/preview/reactnativelogo.png"  width="190" height="55"><img src="./assets/preview/finnhub.png"  width="100" height="55">
 
-   ```bash
-   npm install
-   ```
+## Table of Contents
+- [Screenshots](#screenshots)
+- [Demo (Gifs)](#demo-gifs)
+- [Structure](#structure)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [License](#license)
 
-2. Start the app
+## Screenshots (iOS)
 
-   ```bash
-    npx expo start
-   ```
+<img src="./assets/preview/ios-search-stock.png"  width="140" height="300">&nbsp;<img src="./assets/preview/ios-watchlist-realtime.png"  width="140" height="300">&nbsp;<img src="./assets/preview/ios-create-alert-search.png"  width="140" height="300">&nbsp;<img src="./assets/preview/ios-create-alert.png"  width="140" height="300">&nbsp;
 
-In the output, you'll find options to open the app in a
+## Screenshots (Android)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+<img src="./assets/preview/android-search-stock.png"  width="140" height="300">&nbsp;<img src="./assets/preview/android-stock-watchlist.png"  width="140" height="300">&nbsp;<img src="./assets/preview/android-create-alert-search.png"  width="140" height="300">&nbsp;<img src="./assets/preview/android-create-alert.png"  width="140" height="300">&nbsp;
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## Structure
 
-When you're ready, run:
+- `components`: Essential, reusable building blocks like the stock card and dropdown.
+- `app`: Where the tabs and layout is placed, using expo-router
+- `hooks`: Reusable hooks to connect the app with the Finnhub API endpoints and handle real-time data.
+- `utils`: Utility functions, such as storage utilities for persistent state.
+- `context`: React context files.
+
+
+## Features
+The current application offers:
+
+- **Stock Search**: Search for stocks using the Finnhub API.
+- **Watchlist Management**: Add stocks to a watchlist and remove them as needed.
+- **Price Alerts**: Create price alerts for stocks and receive notifications when the stock price exceeds the alert price.
+- **Real-time Data**: Receive real-time stock data updates from Finnhub.
+
+## Prerequisites
+Ensure you have met the following requirements:
+
+* You have installed the latest version of:
+  * `yarn`
+  * `.nvmrc`
+
+## Dependencies
+The following major dependencies are used in the project:
+
+- React (`react: 18.2.0`) 
+- React Native (`react-native: 0.73.6`) as the main frameworks for building the app interface.
+- Expo Development Build (more info: [Expo Development Builds](https://docs.expo.dev/develop/development-builds/create-a-build/)) for creating a custom development build.
+- GlueStack-io (more info: [GlueStack.io](https://gluestack.io/)) for UI components.
+- react-native-notifier (`react-native-notifier: ^1.0.0`) for in-app notifications.
+- Finnhub API (more info: [Finnhub API](https://finnhub.io/)) for stock data.
+
+## Installation
+Describe the installation process. Include the step-by-step process.
 
 ```bash
-npm run reset-project
-```
+# Clone this repository
+$ git clone git@github.com:jtvargas/stocks-rn.git
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+# Go into the repository
+$ cd stocks-rn
 
-## Learn more
+# Install dependencies
+$ yarn install
 
-To learn more about developing your project with Expo, look at the following resources:
+# Start the server
+$ yarn start
+\```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+**Prerequisites**: Ensure your environment is set up for React Native development. Follow the Expo documentation for setting up development builds.
 
-## Join the community
+### Run the app (**Simulator**)
 
-Join our community of developers creating universal apps.
+**iOS**
+- Run `yarn ios`
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+For physical device use Xcode.
+
+**Android**
+- Run `yarn android`
+
+## License
+Copyright 2024 © Jonathan Taveras

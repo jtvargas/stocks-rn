@@ -80,5 +80,6 @@ export const useStockSocket = (symbols: string[]) => {
   return {
     stockData,
     connected,
+    socket: finnSocketRef.current
   };
 };
