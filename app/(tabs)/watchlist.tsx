@@ -1,12 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, FlatList } from 'react-native';
 import { Center } from "@gluestack-ui/themed"
-
+import { SafeAreaView } from 'react-native-safe-area-context';
+ 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useWatchlistContext } from '@/context/WatchlistContext';
 import { StockCard } from '@/components/StockCard';
+import { StockChart } from '@/components/StockChart';
 
 export default function Watchlist() {
   const { state, addWatchlist, removeWatchlist } = useWatchlistContext();
@@ -37,23 +39,22 @@ export default function Watchlist() {
     )
   }
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#f5f3ff', dark: '#f5f3ff' }}
-      headerImage={<Ionicons size={310} name="eye" style={styles.headerImage} />}>
-      <ThemedView p={"$6"}>
+      <SafeAreaView style={{backgroundColor: '#6ee7b7'}}>
+       <StockChart charLabels={items} chartData={items.map(()=> Math.random() * 100)}/>
+    
+       <ThemedView p={"$6"}>
         <ThemedText type="title">Stock Watchlist</ThemedText>
         {items.length > 0 ?  <ThemedText type="default">Touch a card to remove from wathlist</ThemedText> :null}
-        
+     
         <FlatList
           data={items}
           renderItem={renderListItem}
           keyExtractor={item => item}
-          scrollEnabled={false}
           ListEmptyComponent={renderEmptyList}
           contentContainerStyle={{ height: "100%"}}
         />
       </ThemedView>
-    </ParallaxScrollView>
+      </SafeAreaView>
   );
 }
 

@@ -6,6 +6,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { StockCard } from '@/components/StockCard';
+import { StockChart } from '@/components/StockChart';
 import { StocksDropdown, IStockValue } from '@/components/StocksDropdown';
 import { useWatchlistContext } from "@/context/WatchlistContext"
 import { HStack, VStack } from '@gluestack-ui/themed';
@@ -21,7 +22,7 @@ const stocks = [
   { label: 'Item 8', value: '8' },
 ];
 
-export default function HomeScreen() {
+export default function StocksScreen() {
   const [stockSelected, setStock] = useState<string | null>(null);
   const { state, addWatchlist, removeWatchlist } = useWatchlistContext();
 
@@ -41,13 +42,14 @@ export default function HomeScreen() {
       headerImage={<Ionicons size={310} name="bar-chart" style={styles.headerImage} color={"#059669"} />}>
       <ThemedView p="$6">
         <VStack pb={"$6"}>
-          <ThemedText type="title">Stocks Chart</ThemedText>
+          <ThemedText type="title">Stocks</ThemedText>
           <ThemedText type="default">Touch a card to add to your watchlist</ThemedText>
         </VStack>
        
 
         <StockCard change={2} label='APPL' price={220} marginalStatus='up' onPress={handlePressCard}/>
         <StocksDropdown data={stocks} value={stockSelected} onChange={handleOnSelectStock}/>
+        
       </ThemedView>
     </ParallaxScrollView>
   );

@@ -1,6 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -29,19 +30,21 @@ export default function RootLayout() {
   }
 
   return (
-    <WatchlistProvider>
-      <GluestackUIProvider config={config}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen
-              options={{ presentation: "modal" }}
-              name={"alert"}
-            />
-          </Stack>
-        </ThemeProvider>
-      </GluestackUIProvider>
-    </WatchlistProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <WatchlistProvider>
+        <GluestackUIProvider config={config}>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen
+                options={{ presentation: "modal" }}
+                name={"alert"}
+              />
+            </Stack>
+          </ThemeProvider>
+        </GluestackUIProvider>
+      </WatchlistProvider>
+    </SafeAreaProvider>
   );
 }
