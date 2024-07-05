@@ -1,31 +1,50 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import debounce from 'lodash/debounce';
+import toUpper from 'lodash/toUpper';
+import { useFinnhub } from '@/hooks/useFinnhub';
 
 type StockItem = {
-   label: string; 
-   value: string;
+  label: string; 
+  value: string;
 }
 type StockItems = StockItem[];
-export type IStockValue =  StockItem | null;
+export type IStockValue = StockItem | null;
 
 type StocksDropdownProps = {
-   value: string | null;
-   data: StockItems
-   onChange: (data: IStockValue) => void;
+  value: string | null;
+  onChange: (data: IStockValue) => void;
 }
 
-export function StocksDropdown(props:StocksDropdownProps ) {
+export function StocksDropdown(props: StocksDropdownProps) {
   const [isFocus, setIsFocus] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { symbolSearchResults, loading, symbolSearch } = useFinnhub();
+
+  const debounceSearch =  debounce(symbolSearch, 300);
+
+  useEffect(() => {
+    if (searchQuery.length > 1) {
+      debounceSearch(searchQuery);
+    }
+  }, [searchQuery]);
 
   const handleOnChange = (item: StockItem) => {
-    props.onChange?.(item);
+    props.onChange?.(item.value);
     setIsFocus(false);
   }
 
+  const data = symbolSearchResults ? symbolSearchResults?.map(result => ({
+    label: toUpper(result.displaySymbol),
+    value: toUpper(result.displaySymbol),
+  })): []
+
+  console.log({searchQuery, data, symbolSearchResults})
+
   return (
-    <View style={styles.container}>
+    <>
       <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: '#DADADA' }]}
         placeholderStyle={styles.placeholderStyle}
@@ -34,18 +53,19 @@ export function StocksDropdown(props:StocksDropdownProps ) {
         containerStyle={styles.containerStyle}
         itemContainerStyle={styles.itemContainerStyle}
         iconStyle={styles.iconStyle}
-        data={props.data || []}
+        data={data || []}
         search
         maxHeight={300}
         mode={"modal"}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? 'Select item' : '...'}
+        placeholder={!isFocus ? 'Select stock' : '...'}
         searchPlaceholder="Search..."
         value={props.value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={handleOnChange}
+        onChangeText={setSearchQuery}
         renderLeftIcon={() => (
           <AntDesign
             style={styles.icon}
@@ -55,7 +75,7 @@ export function StocksDropdown(props:StocksDropdownProps ) {
           />
         )}
       />
-    </View>
+    </>
   );
 };
 
@@ -69,6 +89,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 2,
     paddingHorizontal: 8,
+    width: "100%"
+
   },
   containerStyle: {
     borderColor: '#DADADA',

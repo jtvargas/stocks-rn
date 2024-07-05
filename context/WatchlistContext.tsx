@@ -1,5 +1,7 @@
 import React, { createContext, useContext, ReactNode, useEffect, useReducer } from 'react';
 import {getItem, saveItem} from "@/utils/storageUtils"
+import { Notifier, NotifierComponents } from 'react-native-notifier';
+
 import { WatchlistState, WatchlistContextType, WatchlistAction, StockPayload } from '@/types/watchlist';
 import { watchlistReducer } from "@/reducer/watchlisReducer"
 
@@ -36,10 +38,26 @@ export const WatchlistProvider = ({ children }: WatchlistProviderProps) => {
 
   const addWatchlist = (stockItem: StockPayload) => {
     dispatch({ type: 'ADD_WATCHLIST', payload: stockItem });
+    Notifier.showNotification({
+      title: 'Stock Added to Watchlist',
+      description: `${stockItem.symbol} has been successfully added to your watchlist.`,
+      Component: NotifierComponents.Alert,
+      componentProps: {
+        alertType: 'info',
+      },
+    });
   };
 
   const removeWatchlist = (symbol: string) => {
     dispatch({ type: 'REMOVE_WATCHLIST', payload: symbol });
+    Notifier.showNotification({
+      title: 'Stock Removed from Watchlist',
+      description: `${symbol} has been successfully removed from your watchlist.`,
+      Component: NotifierComponents.Alert,
+      componentProps: {
+        alertType: 'warn',
+      },
+    });
   };
 
   return (

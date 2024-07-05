@@ -10,6 +10,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useWatchlistContext } from '@/context/WatchlistContext';
 import { StockCard } from '@/components/StockCard';
 import { useStockSocket } from "@/hooks/useStockSocket"
+import { useAlertContext } from "@/context/AlertContext"
 import { StockChart } from '@/components/StockChart';
 import { getChange } from "@/utils/stocks";
 
@@ -22,7 +23,9 @@ export default function Watchlist() {
   const { state, removeWatchlist } = useWatchlistContext();
   const symbolsWatched = getWatchlistItems(state)
   const { stockData } = useStockSocket(symbolsWatched);
+  const { alerts } = useAlertContext();
 
+  console.log({alerts})
   const removeStockFromWatchlist = (stockId: string) => {
     removeWatchlist(stockId)
   }
@@ -37,7 +40,7 @@ export default function Watchlist() {
   const renderListItem = ({item} :{ item: string}) => {
     return (
       <ThemedView pt={"$6"}>
-        <StockCard label={item} onPress={() => removeStockFromWatchlist(item)} change={getStockChangeData(item)} marginalStatus='up' price={stockData[item]?.p} />
+        <StockCard label={item} onPress={() => removeStockFromWatchlist(item)} change={getStockChangeData(item)} marginalStatus='up' price={stockData[item]?.p} alertPrice={alerts[item]?.price} />
       </ThemedView>
     )
   }
