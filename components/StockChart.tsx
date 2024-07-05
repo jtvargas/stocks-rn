@@ -2,6 +2,7 @@ import {  Dimensions } from 'react-native'
 import React from 'react'
 import {
   BarChart,
+  LineChart
 } from "react-native-chart-kit";
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
@@ -24,7 +25,7 @@ export function StockChart(props: StockChartProps) {
 
   return (
     <>
-    <BarChart
+    <LineChart
       data={{
         labels: props.charLabels || [],
         datasets: [
@@ -35,6 +36,8 @@ export function StockChart(props: StockChartProps) {
       }}
       width={Dimensions.get("screen").width} // from react-native
       height={220}
+      fromZero
+      bezier
       yAxisLabel="$"
       yAxisSuffix=""
       yAxisInterval={1} // optional, defaults to 1
@@ -52,7 +55,7 @@ export function StockChart(props: StockChartProps) {
         propsForDots: {
           r: "6",
           strokeWidth: "2",
-          stroke: "#ffa726"
+          stroke: "#10b981"
         }
       }}
     />

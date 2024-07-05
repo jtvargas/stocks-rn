@@ -5,7 +5,7 @@ export type SymbolSearchResult = {
   type: string;
 };
 
-export type SymbolSearchResponse = {
+export type StockData = {
   "c": number,
   "d": number | null,
   "dp": number,
@@ -13,6 +13,7 @@ export type SymbolSearchResponse = {
   "l": number,
   "o": number,
   "pc": number,
+  "p": number
 }
 
 export type FinnhubError = {

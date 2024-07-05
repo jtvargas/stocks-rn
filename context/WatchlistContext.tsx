@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode, useEffect, useReducer } from 'react';
 import {getItem, saveItem} from "@/utils/storageUtils"
-import { WatchlistState, WatchlistContextType, WatchlistAction } from '@/types/watchlist';
+import { WatchlistState, WatchlistContextType, WatchlistAction, StockPayload } from '@/types/watchlist';
 import { watchlistReducer } from "@/reducer/watchlisReducer"
 
 const WatchlistContext = createContext<WatchlistContextType | undefined>(undefined);
@@ -34,8 +34,8 @@ export const WatchlistProvider = ({ children }: WatchlistProviderProps) => {
     await saveItem('watchlist', newState);
   }
 
-  const addWatchlist = (symbol: string) => {
-    dispatch({ type: 'ADD_WATCHLIST', payload: symbol });
+  const addWatchlist = (stockItem: StockPayload) => {
+    dispatch({ type: 'ADD_WATCHLIST', payload: stockItem });
   };
 
   const removeWatchlist = (symbol: string) => {

@@ -13,34 +13,34 @@ import { Input,InputField,InputSlot,InputIcon, SearchIcon,  VStack } from '@glue
 import { useFinnhub } from '@/hooks/useFinnhub';
 import { getMarginalStatus } from '@/utils/stocks';
 
-const stocks = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
-
 export default function StocksScreen() {
   const { symbolSearchResults, stockSymbols, loading, error, symbolSearch, fetchStockSymbols } = useFinnhub();
   const [query, setQuery] = useState<string>('');
-  const {  addWatchlist  } = useWatchlistContext();
+  const {  addWatchlist, removeWatchlist, state  } = useWatchlistContext();
 
+  console.log(state)
   useEffect(() => {
     fetchStockSymbols("US")
   }, [])
 
  
   const handlePressCard = () => {
-    addWatchlist(query)
+    if(state[query]) {
+      console.log(`symbol: ${query} already watched`)
+      removeWatchlist(query)
+    } else {
+      addWatchlist({
+        symbol: query,
+        l: symbolSearchResults?.l as number,
+        h: symbolSearchResults?.h as number,
+        o: symbolSearchResults?.o as number
+      })
+    }
   }
 
 
   const handleSearch = (symbol: string) => {
-    setQuery(symbol);
+    setQuery(toUpper(symbol));
     symbolSearch(symbol)
   };
   const debounceSearch = debounce(handleSearch, 300)
@@ -64,11 +64,11 @@ export default function StocksScreen() {
               <InputSlot pl="$3">
                 <InputIcon as={SearchIcon} />
               </InputSlot>
-            <InputField placeholder="Search stock by symbol..." onChangeText={debounceSearch}/>
+            <InputField placeholder="Search stock by symbol..." onChangeText={debounceSearch} autoCorrect={false} autoCapitalize='none'/>
           </Input>
         </VStack>
        
-      {symbolSearchResults && !loading?  <StockCard change={symbolSearchResults.d} label={toUpper(query)} price={symbolSearchResults.c} marginalStatus={getMarginalStatus(symbolSearchResults)} onPress={handlePressCard}/>: null}
+      {symbolSearchResults && !loading?  <StockCard change={symbolSearchResults.d} label={query} price={symbolSearchResults.c} marginalStatus={getMarginalStatus(symbolSearchResults)} onPress={handlePressCard}/>: null}
                
       </ThemedView>
     </ParallaxScrollView>

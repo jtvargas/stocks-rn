@@ -6,9 +6,9 @@ export const watchlistReducer = (state: WatchlistState, action: WatchlistAction)
       return action.payload;
     }
     case 'ADD_WATCHLIST': {
-      const newSymbol = action.payload;
-      const newData = { symbol: newSymbol, addedAt: new Date() };
-      const newState = { ...state, [newSymbol]: newData }
+      const stockData = action.payload;
+      const newData = { addedAt: new Date(), ...stockData };
+      const newState = { ...state, [stockData.symbol]: newData }
       return newState
     }
     case 'REMOVE_WATCHLIST': {

@@ -13,3 +13,9 @@ export const getMarginalStatus = (stockData: StockPriceData): 'up' | 'down' => {
   const midpoint = (h + l) / 2;
   return c >= midpoint ? 'up' : 'down';
 };
+export const getChange = (currentPrice: number, openPrice: number): number => {
+  if (openPrice === 0) {
+    throw new Error('Open price cannot be zero.');
+  }
+  return ((currentPrice - openPrice) / openPrice) * 100;
+};

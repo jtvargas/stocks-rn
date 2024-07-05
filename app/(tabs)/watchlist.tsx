@@ -1,32 +1,43 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useEffect } from "react";
 import { StyleSheet, FlatList } from 'react-native';
 import { Center } from "@gluestack-ui/themed"
 import { SafeAreaView } from 'react-native-safe-area-context';
- 
+
+
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useWatchlistContext } from '@/context/WatchlistContext';
 import { StockCard } from '@/components/StockCard';
+import { useStockSocket } from "@/hooks/useStockSocket"
 import { StockChart } from '@/components/StockChart';
+import { getChange } from "@/utils/stocks";
+
+
+const getWatchlistItems = (state: any) => {
+  return Object.keys(state)
+}
 
 export default function Watchlist() {
-  const { state, addWatchlist, removeWatchlist } = useWatchlistContext();
-
-  const getWathlistItems = () => {
-    return Object.keys(state)
-  }
-
-  const items = getWathlistItems()
+  const { state, removeWatchlist } = useWatchlistContext();
+  const symbolsWatched = getWatchlistItems(state)
+  const { stockData } = useStockSocket(symbolsWatched);
 
   const removeStockFromWatchlist = (stockId: string) => {
     removeWatchlist(stockId)
   }
 
+  const getStockChangeData = (symbol: string) => {
+    const baseStockInfo = state[symbol];
+    const currentPrice = stockData[symbol]?.p ?? 100
+
+    return getChange( currentPrice,  baseStockInfo.o) ?? 100
+  }
+
   const renderListItem = ({item} :{ item: string}) => {
     return (
       <ThemedView pt={"$6"}>
-        <StockCard label={item} onPress={() => removeStockFromWatchlist(item)} change={2} marginalStatus='up' price={123} />
+        <StockCard label={item} onPress={() => removeStockFromWatchlist(item)} change={getStockChangeData(item)} marginalStatus='up' price={stockData[item]?.p} />
       </ThemedView>
     )
   }
@@ -38,16 +49,21 @@ export default function Watchlist() {
       </Center>
     )
   }
+
+  console.log({stockData, symbolsWatched, state})
+
+
+
   return (
       <SafeAreaView style={{backgroundColor: '#6ee7b7'}}>
-       <StockChart charLabels={items} chartData={items.map(()=> Math.random() * 100)}/>
+       <StockChart charLabels={symbolsWatched} chartData={symbolsWatched.map((stock) => stockData[stock]?.p ?? 100)}/>
     
        <ThemedView p={"$6"}>
         <ThemedText type="title">Stock Watchlist</ThemedText>
-        {items.length > 0 ?  <ThemedText type="default">Touch a card to remove from wathlist</ThemedText> :null}
+        {symbolsWatched.length > 0 ?  <ThemedText type="default">Touch a card to remove from wathlist</ThemedText> :null}
      
         <FlatList
-          data={items}
+          data={symbolsWatched}
           renderItem={renderListItem}
           keyExtractor={item => item}
           ListEmptyComponent={renderEmptyList}

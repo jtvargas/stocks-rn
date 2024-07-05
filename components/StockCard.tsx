@@ -1,6 +1,7 @@
 import { TouchableOpacity } from 'react-native';
 import { Box, Text, HStack, VStack } from '@gluestack-ui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import round from "lodash/round";
 
 type StockCard = {
   label: string;
@@ -21,11 +22,11 @@ export function StockCard(props: StockCard) {
         </Box>
         <HStack space='sm' alignItems='center'>
         <Ionicons size={24} name={props.marginalStatus === 'up' ? "trending-up": "trending-down"} color={props.marginalStatus === 'up' ? "#10b981": "#e11d48"}/>
-        <Text color={props.marginalStatus === 'up' ? "$tertiary500" : "$rose600"}  size='2xl'>%{props.change}</Text>
+        <Text color={props.marginalStatus === 'up' ? "$tertiary500" : "$rose600"}  size='xl'>%{round(props.change, 3)}</Text>
         </HStack>
       </VStack>
-        <Box  >
-          <Text color="$secondary900" size='lg' bold>${props.price}</Text>
+        <Box  w="$20">
+          <Text color="$secondary900" size='lg' bold>${round(props.price, 2)}</Text>
         </Box>
       </HStack>
     </Box>

@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
 import { finnhubClient } from '@/utils/finnhubClient';
-import { FinnhubError, SymbolSearchResponse, SymbolSearchResult, StockSymbol, StockSymbolsResponse } from '@/types/finnhub';
+import { FinnhubError, StockData, SymbolSearchResult, StockSymbol, StockSymbolsResponse } from '@/types/finnhub';
 
 export const useFinnhub = () => {
   const [stockSymbols, setStockSymbols] = useState<StockSymbolsResponse>([]);
-  const [symbolSearchResults, setSymbolSearchResults] = useState<SymbolSearchResponse>();
+  const [symbolSearchResults, setSymbolSearchResults] = useState<StockData>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,7 +12,7 @@ export const useFinnhub = () => {
     setLoading(true);
     setError(null);
 
-    finnhubClient.quote(query, (error: FinnhubError, data: SymbolSearchResponse) => {
+    finnhubClient.quote(query, (error: FinnhubError, data: StockData) => {
       if (error) {
         setError(error.message);
       } else {
