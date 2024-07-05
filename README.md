@@ -74,7 +74,7 @@ $ yarn install
 
 # Start the server
 $ yarn start
-\```
+```
 
 **Prerequisites**: Ensure your environment is set up for React Native development. Follow the Expo documentation for setting up development builds.
 
