@@ -13,7 +13,7 @@ type StockCard = {
 export function StockCard(props: StockCard) {
   return (
     <TouchableOpacity onPress={props.onPress}>
-    <Box bg="$secondary100" p="$2" borderRadius="$sm">
+    <Box bg="$secondary100" p="$2" borderRadius="$sm" borderColor='$secondary200' borderWidth={'$1'}>
       <HStack space="md" justifyContent='space-between' reversed={false} >
       <VStack space="md" reversed={false}>
       <Box >
