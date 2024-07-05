@@ -2,8 +2,12 @@ import { type TextProps, StyleSheet } from 'react-native';
 import { Text } from "@gluestack-ui/themed"
 
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { ComponentProps } from 'react';
 
-export type ThemedTextProps = TextProps & {
+// Extract props type from the Text component
+type TextGlueStackProps = ComponentProps<typeof Text>;
+
+export type ThemedTextProps = TextProps & TextGlueStackProps & {
   lightColor?: string;
   darkColor?: string;
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';

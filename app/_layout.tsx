@@ -5,10 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { GluestackUIProvider, Text } from "@gluestack-ui/themed"
-import { config } from "@gluestack-ui/config" // Optional if you want to use default theme
-
-
-
+import { config } from "@gluestack-ui/config"
+import {WatchlistProvider} from "@/context/WatchlistContext"
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -31,17 +29,19 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider config={config}>
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-        <Stack.Screen
-          options={{ presentation: "modal" }}
-          name={"alert"}
-        />
-      </Stack>
-    </ThemeProvider>
-    </GluestackUIProvider>
+    <WatchlistProvider>
+      <GluestackUIProvider config={config}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+            <Stack.Screen
+              options={{ presentation: "modal" }}
+              name={"alert"}
+            />
+          </Stack>
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </WatchlistProvider>
   );
 }

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Platform } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { StockCard } from '@/components/StockCard';
 import { StocksDropdown, IStockValue } from '@/components/StocksDropdown';
+import { useWatchlistContext } from "@/context/WatchlistContext"
+import { HStack, VStack } from '@gluestack-ui/themed';
 
 const stocks = [
   { label: 'Item 1', value: '1' },
@@ -21,6 +23,7 @@ const stocks = [
 
 export default function HomeScreen() {
   const [stockSelected, setStock] = useState<string | null>(null);
+  const { state, addWatchlist, removeWatchlist } = useWatchlistContext();
 
   const handleOnSelectStock = (item:  IStockValue) => {
     if(item && item.value) {
@@ -28,19 +31,22 @@ export default function HomeScreen() {
     }
   }
 
+  const handlePressCard = () => {
+    addWatchlist("APPL")
+  }
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
+      headerBackgroundColor={{ light: '#ecfdf5', dark: '#ecfdf5' }}
+      headerImage={<Ionicons size={310} name="bar-chart" style={styles.headerImage} color={"#059669"} />}>
       <ThemedView p="$6">
-        <ThemedText type="title">Stocks Graph Screen!</ThemedText>
-        <HelloWave />
-        <StockCard change={2} label='APPL' price={220} marginalStatus='up' onPress={() => null}/>
+        <VStack pb={"$6"}>
+          <ThemedText type="title">Stocks Chart</ThemedText>
+          <ThemedText type="default">Touch a card to add to your watchlist</ThemedText>
+        </VStack>
+       
+
+        <StockCard change={2} label='APPL' price={220} marginalStatus='up' onPress={handlePressCard}/>
         <StocksDropdown data={stocks} value={stockSelected} onChange={handleOnSelectStock}/>
       </ThemedView>
     </ParallaxScrollView>
@@ -48,6 +54,11 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerImage: {
+    bottom: -90,
+    left: -35,
+    position: 'absolute',
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
