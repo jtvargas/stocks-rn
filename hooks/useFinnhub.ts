@@ -3,8 +3,8 @@ import { finnhubClient } from '@/utils/finnhubClient';
 import { FinnhubError, StockData, SymbolSearchResult, StockSymbol, StockSymbolsResponse } from '@/types/finnhub';
 
 export const useFinnhub = () => {
-  const [stockSymbols, setStockSymbols] = useState<StockSymbolsResponse>([]);
-  const [symbolSearchResults, setSymbolSearchResults] = useState<StockData>();
+  const [symbolQuoteResults, setSymbolQuoteResults] = useState<StockData>();
+  const [symbolSearchResults, setSymbolSearchResults] = useState<SymbolSearchResult[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,40 +12,45 @@ export const useFinnhub = () => {
     setLoading(true);
     setError(null);
 
-    finnhubClient.quote(query, (error: FinnhubError, data: StockData) => {
+    finnhubClient.symbolSearch(query, (error: FinnhubError, data: {count: number, result: SymbolSearchResult[]}) => {
       if (error) {
         setError(error.message);
       } else {
-        if(data.d){
-           setSymbolSearchResults(data);
-        } else {
-          setSymbolSearchResults(undefined);
+        if(data.count > 0 ){
+           setSymbolSearchResults(data.result);
         }
       }
       setLoading(false);
     });
   }, []);
 
-  const fetchStockSymbols = useCallback((market: string) => {
+  const symbolQuote = async (query: string) => {
     setLoading(true);
     setError(null);
 
-    finnhubClient.stockSymbols(market, (error: FinnhubError, data: StockSymbolsResponse) => {
+    if(!query) {
+      return setSymbolQuoteResults(undefined)
+    }
+
+    finnhubClient.quote(query, (error: FinnhubError, data: StockData) => {
       if (error) {
         setError(error.message);
       } else {
-        setStockSymbols(data);
+        if(data.d){
+          setSymbolQuoteResults(data);
+        }
       }
       setLoading(false);
     });
-  }, []);
+  }
+
 
   return {
-    stockSymbols,
+    symbolQuoteResults,
     symbolSearchResults,
     loading,
     error,
-    symbolSearch,
-    fetchStockSymbols
+    symbolQuote,
+    symbolSearch
   };
 };

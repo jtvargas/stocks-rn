@@ -14,14 +14,9 @@ import { useFinnhub } from '@/hooks/useFinnhub';
 import { getMarginalStatus } from '@/utils/stocks';
 
 export default function StocksScreen() {
-  const { symbolSearchResults, stockSymbols, loading, error, symbolSearch, fetchStockSymbols } = useFinnhub();
+  const { loading, symbolSearch, symbolQuote, symbolQuoteResults } = useFinnhub();
   const [query, setQuery] = useState<string>('');
   const {  addWatchlist, removeWatchlist, state  } = useWatchlistContext();
-
-  console.log(state)
-  useEffect(() => {
-    fetchStockSymbols("US")
-  }, [])
 
  
   const handlePressCard = () => {
@@ -31,9 +26,9 @@ export default function StocksScreen() {
     } else {
       addWatchlist({
         symbol: query,
-        l: symbolSearchResults?.l as number,
-        h: symbolSearchResults?.h as number,
-        o: symbolSearchResults?.o as number
+        l: symbolQuoteResults?.l as number,
+        h: symbolQuoteResults?.h as number,
+        o: symbolQuoteResults?.o as number
       })
     }
   }
@@ -41,11 +36,12 @@ export default function StocksScreen() {
 
   const handleSearch = (symbol: string) => {
     setQuery(toUpper(symbol));
-    symbolSearch(symbol)
+    symbolQuote(symbol)
   };
   const debounceSearch = debounce(handleSearch, 300)
 
 
+  console.log({symbolQuoteResults})
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#ecfdf5', dark: '#ecfdf5' }}
@@ -68,7 +64,7 @@ export default function StocksScreen() {
           </Input>
         </VStack>
        
-      {symbolSearchResults && !loading?  <StockCard change={symbolSearchResults.d} label={query} price={symbolSearchResults.c} marginalStatus={getMarginalStatus(symbolSearchResults)} onPress={handlePressCard}/>: null}
+      {symbolQuoteResults && !loading?  <StockCard change={symbolQuoteResults.d} label={query} price={symbolQuoteResults.c} marginalStatus={getMarginalStatus(symbolQuoteResults)} onPress={handlePressCard}/>: null}
                
       </ThemedView>
     </ParallaxScrollView>

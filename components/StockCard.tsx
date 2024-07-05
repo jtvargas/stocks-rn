@@ -7,6 +7,7 @@ type StockCard = {
   label: string;
   change: number;
   price: number;
+  alertPrice: number;
   marginalStatus: "up" | "down";
   onPress: () => void;
 };
@@ -25,9 +26,21 @@ export function StockCard(props: StockCard) {
         <Text color={props.marginalStatus === 'up' ? "$tertiary500" : "$rose600"}  size='xl'>%{round(props.change, 3)}</Text>
         </HStack>
       </VStack>
+
+      <VStack justifyContent='space-between' alignItems='flex-end'>
         <Box  w="$20">
-          <Text color="$secondary900" size='lg' bold>${round(props.price, 2)}</Text>
+          <Text color="$secondary900" size='lg' bold>${props.price ? round(props.price, 2) : '--'}</Text>
         </Box>
+
+        {props.alertPrice ? (
+          <HStack space='sm' alignItems='center'>
+          <Ionicons size={16} name={"notifications-sharp"} color={ "#fbbf24"}/>
+          <Text color={"$secondary400"}  size='sm'>Alert higher than: ${props.alertPrice}</Text>
+        </HStack>
+        ): null}
+        
+      </VStack>
+       
       </HStack>
     </Box>
     </TouchableOpacity>
